@@ -14,7 +14,7 @@ public class SocialManager : MonoBehaviour
             case _Mode.OD:
 				gameObject.AddComponent ("ODUser");
 				_CurrentUser = gameObject.GetComponent<ODUser>() as ISocialUser;
-				_CurrentUser.MakePurchase("Лимонад", "Класс", "777", 1);
+				//_CurrentUser.MakePurchase("Лимонад", "Класс", "777", 1);
             break;
 
             default:
