@@ -32,19 +32,21 @@ public class ODUser : OdnoklassnikiWebplayerAPI, ISocialUser
    	private string _MiddleUserPhotoURL = "";
    	private string _BigUserPhotoURL = "";
 	private List<ISocialFriend> _Friends = null;
+	private List<ISocialFriend> _AppFriends = null;
 
    	//Propertys:
-	public string UserID 				{ get { return _UserID; 			} }
-	public string UserName 				{ get { return _UserName; 			} }
-	public string UserLastName 			{ get { return _UserLastName; 		} }
-	public string UserGender 			{ get { return _UserGender; 		} }
-	public string UserLocation 			{ get { return _UserLocation; 		} }
-	public string UserBirthDay 			{ get { return _UserBirthDay; 		} }	
-	public string SmallUserPhotoURL 	{ get { return _SmallUserPhotoURL; 	} }
-	public string MiddleUserPhotoURL 	{ get { return _MiddleUserPhotoURL; } }
-	public string BigUserPhotoURL 		{ get { return _BigUserPhotoURL; 	} }
-	public string InternalUserID 		{ get { return _Prefix + _UserID; 	} }
-	public List<ISocialFriend> Friends 	{ get { return _Friends; 			} }
+	public string UserID 					{ get { return _UserID; 			} }
+	public string UserName 					{ get { return _UserName; 			} }
+	public string UserLastName 				{ get { return _UserLastName; 		} }
+	public string UserGender 				{ get { return _UserGender; 		} }
+	public string UserLocation 				{ get { return _UserLocation; 		} }
+	public string UserBirthDay 				{ get { return _UserBirthDay; 		} }	
+	public string SmallUserPhotoURL 		{ get { return _SmallUserPhotoURL; 	} }
+	public string MiddleUserPhotoURL 		{ get { return _MiddleUserPhotoURL; } }
+	public string BigUserPhotoURL 			{ get { return _BigUserPhotoURL; 	} }
+	public string InternalUserID 			{ get { return _Prefix + _UserID; 	} }
+	public List<ISocialFriend> Friends 		{ get { return _Friends; 			} }
+	public List<ISocialFriend> AppFriends 	{ get { return _AppFriends; 		} }
 
 
 	void Start () {
@@ -91,6 +93,20 @@ public class ODUser : OdnoklassnikiWebplayerAPI, ISocialUser
 		base.JSshowPayment(name, description, code, price, null, null, _Currency, _PaymentVerification);
 	}
 
+	protected override void OnGetAppUserFriends(string param)
+	{
+		_AppFriends = new List<ISocialFriend>();
+		List< string > Friends = Json.Deserialize(param) as List< string >;
+		for(int i = 0; i < _Friends.Count; i++)
+		{
+			ISocialFriend Friend = _Friends[i] as ISocialFriend;
+			if(Friends.Contains(Friend.UserID))
+			{
+				_AppFriends.Add(Friend);
+			}
+		}
+	}
+
 	protected override void OnGetUserFriendsData(string param){
 		_Friends = new List<ISocialFriend>();
 		List< object > Friends = Json.Deserialize(param) as List< object >;
@@ -105,6 +121,8 @@ public class ODUser : OdnoklassnikiWebplayerAPI, ISocialUser
 											Friend[_BigUserPicURL] as string);
            _Friends.Add(LocODFriend);
 		}
+		//only after _Friends is full
+		base.GetAppFriends();
 	}
 
 	protected override void GetFriendsCallBack(string param){

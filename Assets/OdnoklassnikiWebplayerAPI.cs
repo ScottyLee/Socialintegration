@@ -96,6 +96,16 @@ public class OdnoklassnikiWebplayerAPI : MonoBehaviour {
 	}
 	
 
+	protected virtual void GetAppFriends(){
+		
+		Dictionary<string,object> p = new Dictionary<string, object>()
+		{
+			{"method", "friends.getAppUsers"}
+		};
+
+		CallApiMethodObj(p);
+	}
+
 	protected virtual void GetFriendData(string uids){
 		
 		Dictionary<string,object> p = new Dictionary<string,object>()
@@ -106,6 +116,11 @@ public class OdnoklassnikiWebplayerAPI : MonoBehaviour {
 		};
 
 		CallApiMethodObj(p);
+	}
+
+	protected virtual void OnGetAppUserFriends(string param)
+	{
+		this.LogToConsole ("[unity]: ovveride me! OnGetAppUserFriends : " + param);
 	}
 
 	protected virtual void OnGetUserFriendsData(string param)

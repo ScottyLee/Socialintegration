@@ -29,9 +29,25 @@ OKAPIWrapper = {
             FAPI.Client.call(JSON.parse(parameters), OKAPIWrapper.on_get_users_data);
         }
 
+        if (dat.method == "friends.getAppUsers")
+        {
+            FAPI.Client.call(JSON.parse(parameters), OKAPIWrapper.on_get_app_users);
+        }        
+
         FAPI.Client.call(JSON.parse(parameters), OKAPIWrapper.unity_api_callback);
     },
     
+
+    on_get_app_users: function(method, result, data)
+    {
+        // console.log("[tarce] on_get_app_users");
+        // Res = JSON.stringify(result);
+        // console.log("[tarce] method - " + method);
+        // console.log("[tarce] result - " + Res);
+        // console.log("[tarce] data - " + data);
+        OKAPIWrapper.unityObject.getUnity().SendMessage("SocialNetwork", "OnGetAppUserFriends", JSON.stringify(result));
+    },
+
     on_get_users_data:  function(method, result, data)
     {
         OKAPIWrapper.unityObject.getUnity().SendMessage("SocialNetwork", "OnGetUserFriendsData", JSON.stringify(result));
